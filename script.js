@@ -588,8 +588,8 @@ Promise.all([promiseOfGeojsonData, promiseOfTidigareSynpunkter]).then(function(v
 			'Snabbladdning': colors.magenta99,
 			'Normalladdning': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
-			'Elnätet uppgraderas på platsen. Kan ej reserveras.': colors.orange9999,
-			'Övrig (ej utpekad)': colors.grey100
+			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
+			'Ej utredd': colors.grey100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
