@@ -372,7 +372,7 @@ function onEachFeature(feature, layer) {
 }
 
 
-var promiseOfGeojsonData = new Promise(function(resolve, reject) {
+var geojsonData = new Promise(function(resolve, reject) {
 	$.getJSON("js/inventeradeYtor191021.geojson", function(data) {
 		//console.log(data)
 		//Interpreting antal platser and diskvalificeringskolumn.
@@ -487,7 +487,7 @@ var promiseOfGeojsonData = new Promise(function(resolve, reject) {
 	});
 });
 
-var promiseOfTidigareSynpunkter = new Promise(function(resolve, reject) {
+var tidigareSynpunkter = new Promise(function(resolve, reject) {
 	$.get(
 		"https://docs.google.com/spreadsheets/d/e/2PACX-1vR2YweDwSLRgG04w6aJqRSQLGUtbtv7IyNyQCoac4P0EcuusbKimuRaYgKvdXPWpcDy72jGjHBmESn-/pub?gid=0&single=true&output=csv",
 		//Reading the data from google sheets...
@@ -502,7 +502,7 @@ var promiseOfTidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-Promise.all([promiseOfGeojsonData, promiseOfTidigareSynpunkter]).then(function(values) {
+Promise.all([geojsonData, tidigareSynpunkter]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 		//Assign sypunkter from sheet to features in geojson
@@ -511,15 +511,7 @@ Promise.all([promiseOfGeojsonData, promiseOfTidigareSynpunkter]).then(function(v
 	for (var j in values[0].features) {
 		values[0].features[j].properties.Synpunkter = []
 	}
-	for (var i in qcIdsOfSynpunkter) {
 
-		for (var j in values[0].features) {
-			/*if (qcIdsOfSynpunkter[i].toString() == values[0].features[j].properties.qc_id.toString()) {
-			values[0].features[j].properties.Synpunkter.push(synpunkterArray[i])
-			}*/
-		}
-
-	}
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
