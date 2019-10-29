@@ -507,13 +507,8 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 	console.log('1')
 	//console.log(values);
 	globalValues = values
-		//Assign sypunkter from sheet to features in geojson
-	for (var j in values[0].features) {
-		values[0].features[j].properties.Synpunkter = []
-	}
-
-	/*
-	var andraYtor = L.geoJson(values[0], {
+	
+	var ytterstadensYtor = L.geoJson(values[1], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 			return true //internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
@@ -525,7 +520,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	*/
+	
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
