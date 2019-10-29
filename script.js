@@ -486,7 +486,7 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 });
 
 var ytterstaden = new Promise(function(resolve, reject) {
-	$.getJSON("js/ytterstadsparkeringarLighter.geojson", function(data) {
+	$.getJSON("js/ytterstadsparkeringarPortion.geojson", function(data) {
 		for (feat in data.features) {
 			props = data.features[feat].properties
 			props.ejInventerad = true
