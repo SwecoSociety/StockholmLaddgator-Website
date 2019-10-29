@@ -504,8 +504,8 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-console.log('wefgh')
 Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(values) {
+	console.log(values))
 	//console.log(values);
 	globalValues = values
 		//Assign sypunkter from sheet to features in geojson
@@ -516,7 +516,7 @@ Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(va
 	}
 
 	/*
-	var andraYtor = L.geoJson(values[1], {
+	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 			return true //internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
