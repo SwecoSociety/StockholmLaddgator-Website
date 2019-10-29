@@ -376,7 +376,7 @@ function onEachFeature(feature, layer) {
 }
 
 var inventeradeYtor = new Promise(function(resolve, reject) {
-	$.getJSON("js/inventeradeYtor191021.geojson", function(data) {
+	$.getJSON("js/inventeradeYtor.geojson", function(data) {
 		//console.log(data)
 		//Interpreting antal platser and diskvalificeringskolumn.
 
