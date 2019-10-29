@@ -588,7 +588,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor,ytterstadensYtor]);
+	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
 
