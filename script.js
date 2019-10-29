@@ -482,6 +482,12 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 
 var ytterstaden = new Promise(function(resolve, reject) {
 	$.getJSON("js/ytterstadsparkeringarLighter.geojson", function(data) {
+		for (feat in data.features) {
+			props = data.features[feat].properties
+			if (!("Skapad" in props.dataset)){
+				props['Skapad'] = '2019-11-04'
+			}
+		}
 		resolve(data)
 	})
 })
