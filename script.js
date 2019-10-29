@@ -483,7 +483,6 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 
 var ytterstaden = new Promise(function(resolve, reject) {
 	$.getJSON("js/ytterstadsparkeringarLighter.geojson", function(data) {
-		console.log(data)
 	})
 })
 
@@ -504,7 +503,7 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
+Promise.all([inventeradeYtor]).then(function(values) {
 	console.log('1')
 	//console.log(values);
 	globalValues = values
@@ -540,7 +539,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	
+
 	console.log('2')
 	var tagnaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
