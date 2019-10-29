@@ -287,7 +287,7 @@ function buildPopupContent(feature) {
 	} else if (fp.snabbAppropriate) {
 		popupContent += 'Endast snabbladdning'
 	} else if (fp.ejInventerad){
-		popupContent += 'Endast snabbladdning'
+		popupContent += 'Ej inventerad'
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
