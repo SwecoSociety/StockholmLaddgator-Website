@@ -588,6 +588,19 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
+
+	var ytorUnderFoerberedelse = L.geoJson(values[0], {
+		onEachFeature: onEachFeature,
+		filter: function(feature, layer) {
+			return feature.properties.Status == 'Foerbereds';
+		},
+		style: function(params) {
+			return {
+				weight: 3,
+				color: colors.orange9999
+			}
+		}
+	}).addTo(map)
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
