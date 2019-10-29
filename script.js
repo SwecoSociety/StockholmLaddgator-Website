@@ -223,7 +223,6 @@ function searchAndZoom(e) {
 		map.removeLayer(zoomYtor)
 	}
 
-	var idMatch = false
 	zoomYtor = L.geoJson(globalValues[0], { //Alltså alla ytor som inte är utfiltrerade (alltid dold)
 			onEachFeature: onEachFeature,
 			filter: function(feature, layer) {
@@ -371,15 +370,13 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-
-var geojsonData = new Promise(function(resolve, reject) {
+var inventeradeYtor = new Promise(function(resolve, reject) {
 	$.getJSON("js/inventeradeYtor191021.geojson", function(data) {
 		//console.log(data)
 		//Interpreting antal platser and diskvalificeringskolumn.
 
 		for (feat in data.features) {
 			props = data.features[feat].properties
-				//console.log(props)
 			if (props.AntalPlatser < 4) {
 				props.AntalPlBetyg = 1
 			} else if (props.AntalPlatser < 10) {
@@ -429,9 +426,7 @@ var geojsonData = new Promise(function(resolve, reject) {
 			props.normalAppropriate = props.normalScore >= minScore.n && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 //&& props.Status == ''
 			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
 				//Justerar resultat utifrån andra kriterier.
-				/*if (!props.snabbAppropriate) {
-					props.snabbAppropriate = props.Konsekvens == 'Snabbladdning tillåts'
-				}*/
+
 			if (props.normalAppropriate || props.snabbAppropriate) {
 				//console.log(props.Status)
 				if (props.Status == '' || props.Status == null) {
@@ -439,7 +434,6 @@ var geojsonData = new Promise(function(resolve, reject) {
 				}
 			}
 			//data.features[feat].properties = props
-
 
 			//Summing totalts in keyNumbers.
 
@@ -487,6 +481,14 @@ var geojsonData = new Promise(function(resolve, reject) {
 	});
 });
 
+var ytterstaden = new Promise(function(resolve, reject) {
+	$.getJSON("js/ytterstadsparkeringarLighter.geojson", function(data) {
+		console.log(data)
+	})
+})
+
+
+
 var tidigareSynpunkter = new Promise(function(resolve, reject) {
 	$.get(
 		"https://docs.google.com/spreadsheets/d/e/2PACX-1vR2YweDwSLRgG04w6aJqRSQLGUtbtv7IyNyQCoac4P0EcuusbKimuRaYgKvdXPWpcDy72jGjHBmESn-/pub?gid=0&single=true&output=csv",
@@ -502,16 +504,28 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-Promise.all([geojsonData, tidigareSynpunkter]).then(function(values) {
+Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 		//Assign sypunkter from sheet to features in geojson
-	var qcIdsOfSynpunkter = transposeArray(values[1])[4]
-	var synpunkterArray = transposeArray(values[1])[1]
+	var qcIdsOfSynpunkter = transposeArray(values[2])[4]
+	var synpunkterArray = transposeArray(values[2])[1]
 	for (var j in values[0].features) {
 		values[0].features[j].properties.Synpunkter = []
 	}
 
+	var andraYtor = L.geoJson(values[1], {
+		onEachFeature: onEachFeature,
+		filter: function(feature, layer) {
+			return true //internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
+		},
+		style: function(params) {
+			return {
+				weight: 3,
+				color: colors.grey100
+			}
+		}
+	}).addTo(map)
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
@@ -521,7 +535,7 @@ Promise.all([geojsonData, tidigareSynpunkter]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.grey100
+				color: colors.black100
 			}
 		}
 	}).addTo(map)
