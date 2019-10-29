@@ -505,7 +505,7 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 var globalValues
 
 Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(values) {
-	console.log(values))
+	console.log(values)
 	//console.log(values);
 	globalValues = values
 		//Assign sypunkter from sheet to features in geojson
