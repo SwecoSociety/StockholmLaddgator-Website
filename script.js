@@ -504,6 +504,7 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
+console.log('wefgh')
 Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(values) {
 	//console.log(values);
 	globalValues = values
