@@ -515,7 +515,6 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 var globalValues
 
 Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
-	console.log('1')
 	//console.log(values);
 	globalValues = values
 	
@@ -589,7 +588,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
+	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor,ytterstadensYtor]);
 	map.fitBounds(group.getBounds());
 
 
