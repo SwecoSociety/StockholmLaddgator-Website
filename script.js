@@ -491,9 +491,7 @@ var ytterstaden = new Promise(function(resolve, reject) {
 			props = data.features[feat].properties
 			props.ejInventerad = true
 			props['id'] = props['ID']
-			if (!props.hasAttribute("skapad")){
-				props['skapad'] = '2019-11-04'
-			}
+			props['skapad'] = '2019-11-04'
 		}
 		resolve(data)
 	})
