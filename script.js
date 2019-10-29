@@ -514,6 +514,7 @@ Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(va
 		values[0].features[j].properties.Synpunkter = []
 	}
 
+	/*
 	var andraYtor = L.geoJson(values[1], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
@@ -526,6 +527,7 @@ Promise.all([inventeradeYtor, ytterstaden, tidigareSynpunkter]).then(function(va
 			}
 		}
 	}).addTo(map)
+	*/
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
