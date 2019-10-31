@@ -341,6 +341,9 @@ function buildPopupContent(feature) {
 			if (fp.DyrElanslutning) {
 				popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
 			}
+			if (fp.Status == 'Foerbereds'){
+				popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio i samordning med existerande elnätsprojekt.'
+			}
 		}
 		if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
 			popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
