@@ -490,8 +490,6 @@ var ytterstaden = new Promise(function(resolve, reject) {
 		for (feat in data.features) {
 			props = data.features[feat].properties
 			props.ejInventerad = true
-			props['id'] = props['ID']
-			props['skapad'] = '2019-11-04'
 		}
 		resolve(data)
 	})
