@@ -329,21 +329,21 @@ function buildPopupContent(feature) {
 
 		//popupContent += '<b>trafikintensitet: </b>' + fp['Trafikfloeden'] + '<br>'
 
-		if (fp.normalAppropriate || fp.snabbAppropriate) {
-			if (fp.Traed == 1) {
-				popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
-			} else if (fp.Traed == 2) {
-				popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
-			}
-			/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
-				popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
-			}*/
-			if (fp.DyrElanslutning) {
-				popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
-			}
-			if (fp.Status == 'Foerbereds'){
-				popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio i samordning med existerande elnätsprojekt.'
-			}
+		//if (fp.normalAppropriate || fp.snabbAppropriate) {
+		if (fp.Status == 'Foerbereds'){
+			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio i samordning med existerande elnätsprojekt.'
+		}
+		if (fp.Traed == 1) {
+			popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
+		} else if (fp.Traed == 2) {
+			popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
+		}
+		/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
+			popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
+		}*/
+		if (fp.DyrElanslutning) {
+			popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
+		//	}
 		}
 		if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
 			popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
