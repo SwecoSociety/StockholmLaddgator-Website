@@ -301,12 +301,13 @@ function buildPopupContent(feature) {
 
 	if (!fp.ejInventerad){
 		popupContent += '<b>Ungefärligt antal platser: </b>' + fp['AntalPlatser'] + '<br>'
-
+	}
 		/*if (fp['Kommentar'] != null && fp['Kommentar'] != "") {
 			popupContent += '<b>Kommentar: </b>' + fp['Kommentar'] + '<br>'
 		}*/
 		//popupContent += '<b>Konsekvens av kommentaren: </b>' + fp['Konsekvens'] + '<br>' //
 		popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
+	if (!fp.ejInventerad){
 		if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
 			popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
 		}
@@ -490,6 +491,7 @@ var ytterstaden = new Promise(function(resolve, reject) {
 		for (feat in data.features) {
 			props = data.features[feat].properties
 			props.ejInventerad = true
+			props.Status = 'Tillgänglig'
 		}
 		resolve(data)
 	})
