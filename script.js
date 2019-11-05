@@ -331,7 +331,7 @@ function buildPopupContent(feature) {
 
 		//if (fp.normalAppropriate || fp.snabbAppropriate) {
 		if (fp.Status == 'Foerbereds'){
-			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio i samordning med existerande elnätsprojekt.'
+			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
 		}
 		if (fp.Traed == 1) {
 			popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
