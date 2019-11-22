@@ -330,7 +330,7 @@ function buildPopupContent(feature) {
 		//popupContent += '<b>trafikintensitet: </b>' + fp['Trafikfloeden'] + '<br>'
 
 		//if (fp.normalAppropriate || fp.snabbAppropriate) {
-		if (fp.Status == 'Foerbereds'){
+		if (fp.Status == 'Förbereds'){
 			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
 		}
 		if (fp.Traed == 1) {
@@ -597,7 +597,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 	var ytorUnderFoerberedelse = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.Status == 'Foerbereds';
+			return feature.properties.Status == 'Förbereds';
 		},
 		style: function(params) {
 			return {
