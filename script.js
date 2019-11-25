@@ -291,9 +291,6 @@ function buildPopupContent(feature) {
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
-	if (internVy && fp.skapad <= fp.Granskad && fp.StatusAendrad <= fp.Granskad) {
-		popupContent += ' (Granskad i tidigare remiss)'
-	}
 	popupContent += "</h4>"
 
 	popupContent += '<b>Skapad: </b>' + fp['skapad'].replace(/\//g, "-") + '<br>' //This replaces all "/" instead of just the first one.
@@ -425,14 +422,6 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 				}
 			}
 			//Kollar vad som blir utpekat enl. ursprungskriterier och tillägg.
-
-			if (props.StatusAendrad == null) {
-				props.StatusAendrad = '2000/01/01'
-			}
-			if (props.Granskad == null) {
-				props.Granskad = '2000/01/01'
-			}
-			//console.log(props.StatusAendrad)
 
 			props.normalAppropriate = props.normalScore >= minScore.n && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 //&& props.Status == ''
 			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
