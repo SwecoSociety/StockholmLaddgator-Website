@@ -291,9 +291,6 @@ function buildPopupContent(feature) {
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
-	if (internVy && fp.skapad <= fp.Granskad && fp.StatusAendrad <= fp.Granskad) {
-		popupContent += ' (Granskad i tidigare remiss)'
-	}
 	popupContent += "</h4>"
 
 	popupContent += '<b>Skapad: </b>' + fp['skapad'].replace(/\//g, "-") + '<br>' //This replaces all "/" instead of just the first one.
@@ -330,7 +327,7 @@ function buildPopupContent(feature) {
 		//popupContent += '<b>trafikintensitet: </b>' + fp['Trafikfloeden'] + '<br>'
 
 		//if (fp.normalAppropriate || fp.snabbAppropriate) {
-		if (fp.Status == 'Foerbereds'){
+		if (fp.Status == 'Förbereds'){
 			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
 		}
 		if (fp.Traed == 1) {
@@ -425,14 +422,6 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 				}
 			}
 			//Kollar vad som blir utpekat enl. ursprungskriterier och tillägg.
-
-			if (props.StatusAendrad == null) {
-				props.StatusAendrad = '2000/01/01'
-			}
-			if (props.Granskad == null) {
-				props.Granskad = '2000/01/01'
-			}
-			//console.log(props.StatusAendrad)
 
 			props.normalAppropriate = props.normalScore >= minScore.n && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 //&& props.Status == ''
 			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
@@ -597,7 +586,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 	var ytorUnderFoerberedelse = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.Status == 'Foerbereds';
+			return feature.properties.Status == 'Förbereds';
 		},
 		style: function(params) {
 			return {
