@@ -407,13 +407,9 @@ var allaYtor = new Promise(function(resolve, reject) {
 			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
 				//Justerar resultat utifrån andra kriterier.
 
-			if (props.normalAppropriate || props.snabbAppropriate) {
-				//console.log(props.Status)
-				if (props.Status == '' || props.Status == null) {
-					props.Status = 'Tillgänglig'
-				}
-			}
-			else {
+
+			if (props.Status == '' || props.Status == null) {
+				props.Status = 'Tillgänglig'
 				if (props.Driftmaott == '' || props.Driftmaott == null) {
 					props.ejInventerad = true
 				}
