@@ -21,7 +21,7 @@ var keyNumbers = {
 		oevriga: 0,
 	}
 }
-
+keyNumbers.platser = {...keyNumbers.gator}
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -571,10 +571,10 @@ Promise.all([allaYtor]).then(function(values) {
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
-
 	var legend = L.control({
 		position: 'bottomright'
 	});
+
 	legend.onAdd = function(map) {
 		var usedColors = {
 			'Snabbladdning': colors.magenta99,
