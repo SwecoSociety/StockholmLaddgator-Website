@@ -280,7 +280,7 @@ function buildPopupContent(feature) {
 	popupContent += '<b>Skapad: </b>' + fp['skapad'].replace(/\//g, "-") + '<br>' //This replaces all "/" instead of just the first one.
 	popupContent += '<b>ID: </b>' + fp['id'] + '<br>' //+ ' (' + fp['qc_id'] + ')' + '<br>'
 
-	if (!fp.ejInventerad){
+	if (fp['AntalPlatser'] != '' && fp['AntalPlatser'] != null ){
 		popupContent += '<b>Ungefärligt antal platser: </b>' + fp['AntalPlatser'] + '<br>'
 	}
 
