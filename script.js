@@ -6,9 +6,6 @@ if (isIE) {
 var internVy = false
 var tidigareSynpunkter, zoomYtor
 
-var lastUpdate = 0
-
-
 var keyNumbers = {
 	gator: {
 		totalt: 0,
@@ -23,21 +20,13 @@ var keyNumbers = {
 		reserverade: 0,
 		oevriga: 0,
 
-	},
-	platser: {
-		totalt: 0,
-		utpekade: {
-			normal: 0,
-			snabb: 0,
-			snabbOchNormal: 0,
-			snabbEllerNormal: 0,
-		},
-		avtalade: 0,
-		anlagda: 0,
-		reserverade: 0,
-		oevriga: 0,
 	}
 }
+
+keyNumbers.platser = {...keyNumbers.gator}
+keyNumbers.gator.totalt = 1
+console.log(keyNumbers.platser.totalt)
+
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -378,8 +367,8 @@ function onEachFeature(feature, layer) {
 
 var inventeradeYtor = new Promise(function(resolve, reject) {
 	$.getJSON("js/inventeradeYtor.geojson", function(data) {
-		if(document.URL.indexOf("dev") >= 0){ 
-			console.log(data)	
+		if(document.URL.indexOf("dev") >= 0){
+			console.log(data)
 		}
 		//Interpreting antal platser and diskvalificeringskolumn.
 
@@ -511,7 +500,7 @@ var globalValues
 Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 	//console.log(values);
 	globalValues = values
-	
+
 	var ytterstadensYtor = L.geoJson(values[1], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
@@ -524,7 +513,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	
+
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
@@ -538,7 +527,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	
+
 	console.log('2')
 	var tagnaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
