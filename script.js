@@ -485,7 +485,7 @@ Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 
-	var ejInventeradeYtor = L.geoJson(values[1], {
+	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 			return feature.properties.Status == 'Ej inventerad';
@@ -512,7 +512,6 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	console.log('2')
 	var tagnaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
