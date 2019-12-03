@@ -415,7 +415,7 @@ var allaYtor = new Promise(function(resolve, reject) {
 			}
 			else {
 				if (props.Driftmaott == '' || props.Driftmaott == null) {
-					props.Status = 'Ej inventerad'
+					props.ejInventerad = true
 				}
 			}
 
@@ -488,7 +488,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.Status == 'Ej inventerad';
+			return feature.properties.ejInventerad;
 		},
 		style: function(params) {
 			return {
@@ -580,7 +580,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Normalladdning': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej inventerad': colors.grey100
+			'Ej utredd': colors.grey100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
