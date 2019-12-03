@@ -286,64 +286,64 @@ function buildPopupContent(feature) {
 
 	popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
 
-	if (!fp.ejInventerad){
-		if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
-			popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
+
+	if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
+		popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
+	}
+
+	if (internVy) {
+		popupContent += '<br><h4>Kriteriebedömning</h4>'
+		popupContent += '<b>Exponering: </b>' + fp['Exponering'] + '<br>'
+		popupContent += '<b>Parkeringsvinkel: </b>' + fp['Pvinkel'] + '<br>'
+		popupContent += '<b>Gaturum: </b>' + fp['Gaturum'] + '<br>'
+		popupContent += '<b>Driftbredd: </b>' + fp['Driftmaott'] + '<br>'
+		popupContent += '<b>Plankrock: </b>' + fp['Plankrock'] + '<br>'
+		popupContent += '<b>Storlek: </b>' + fp['AntalPlBetyg'] + '<br>'
+		popupContent += '<b>Vattenavstånd: </b>' + fp['Vattennaerhet'] + '<br>'
+		popupContent += '<b>Sommargågata: </b>' + fp['Sommargaogata'] + '<br>'
+			//popupContent += '<b>Trädavstånd: </b>' + fp['Traed'] + '<br>'
+		popupContent += '<br><b>Lämpligghet för normalladdning: </b>' + fp['normalScore'] + '<br>'
+		popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
+	}
+
+	//if (fp.normalAppropriate || fp.snabbAppropriate) {
+	if (fp.Status == 'Förbereds'){
+		popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
+	}
+	if (fp.Traed == 1) {
+		popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
+	} else if (fp.Traed == 2) {
+		popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
+	}
+	/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
+		popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
+	}*/
+	if (fp.DyrElanslutning) {
+		popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
+	//	}
+	}
+	if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
+		popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
+	}
+	if (internVy) {
+		popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
+		for (var i in fp.Synpunkter) {
+			popupContent += fp.Synpunkter[i] + '<br>'
+
 		}
 
-		if (internVy) {
-			popupContent += '<br><h4>Kriteriebedömning</h4>'
-			popupContent += '<b>Exponering: </b>' + fp['Exponering'] + '<br>'
-			popupContent += '<b>Parkeringsvinkel: </b>' + fp['Pvinkel'] + '<br>'
-			popupContent += '<b>Gaturum: </b>' + fp['Gaturum'] + '<br>'
-			popupContent += '<b>Driftbredd: </b>' + fp['Driftmaott'] + '<br>'
-			popupContent += '<b>Plankrock: </b>' + fp['Plankrock'] + '<br>'
-			popupContent += '<b>Storlek: </b>' + fp['AntalPlBetyg'] + '<br>'
-			popupContent += '<b>Vattenavstånd: </b>' + fp['Vattennaerhet'] + '<br>'
-			popupContent += '<b>Sommargågata: </b>' + fp['Sommargaogata'] + '<br>'
-				//popupContent += '<b>Trädavstånd: </b>' + fp['Traed'] + '<br>'
-			popupContent += '<br><b>Lämpligghet för normalladdning: </b>' + fp['normalScore'] + '<br>'
-			popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
-		}
-
-		//if (fp.normalAppropriate || fp.snabbAppropriate) {
-		if (fp.Status == 'Förbereds'){
-			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
-		}
-		if (fp.Traed == 1) {
-			popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
-		} else if (fp.Traed == 2) {
-			popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
-		}
-		/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
-			popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
-		}*/
-		if (fp.DyrElanslutning) {
-			popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
-		//	}
-		}
-		if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
-			popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
-		}
-		if (internVy) {
-			popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
-			for (var i in fp.Synpunkter) {
-				popupContent += fp.Synpunkter[i] + '<br>'
-
-			}
-
-			popupContent += '<br><h3>Lämna synpunkt</h3><form style="width:200px" js_action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" "id="gform" >' //target="hiddenFrame"   method="POST" action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" ">'
-			popupContent += 'Synpunkt:<br>'
-			popupContent += '<input type="text" name="Synpunkt" value="' + formDefaultVals.synpunkt + '"><br>'
-			popupContent += 'Namn:<input type="text" name="Namn" value="' + formDefaultVals.namn + '"><br>'
-			popupContent += 'Kontaktinfo:<input type="text" name="Kontaktinfo" value="' + formDefaultVals.kontaktinfo + '"><br>'
-			popupContent += '<button type="button" class="button" onClick="jsSubmitForm(this.form)">Skicka</button> ' //'<input type="submit" value="Submit">'
-			//popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
-			popupContent += '</form>'
-			popupContent += '</div>'
-		}
+		popupContent += '<br><h3>Lämna synpunkt</h3><form style="width:200px" js_action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" "id="gform" >' //target="hiddenFrame"   method="POST" action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" ">'
+		popupContent += 'Synpunkt:<br>'
+		popupContent += '<input type="text" name="Synpunkt" value="' + formDefaultVals.synpunkt + '"><br>'
+		popupContent += 'Namn:<input type="text" name="Namn" value="' + formDefaultVals.namn + '"><br>'
+		popupContent += 'Kontaktinfo:<input type="text" name="Kontaktinfo" value="' + formDefaultVals.kontaktinfo + '"><br>'
+		popupContent += '<button type="button" class="button" onClick="jsSubmitForm(this.form)">Skicka</button> ' //'<input type="submit" value="Submit">'
+		//popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
+		popupContent += '</form>'
 		popupContent += '</div>'
 	}
+	popupContent += '</div>'
+
 
 	return popupContent
 }
