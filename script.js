@@ -19,13 +19,8 @@ var keyNumbers = {
 		anlagda: 0,
 		reserverade: 0,
 		oevriga: 0,
-
 	}
 }
-
-keyNumbers.platser = {...keyNumbers.gator}
-keyNumbers.gator.totalt = 1
-console.log(keyNumbers.platser.totalt)
 
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
@@ -288,11 +283,9 @@ function buildPopupContent(feature) {
 	if (!fp.ejInventerad){
 		popupContent += '<b>Ungefärligt antal platser: </b>' + fp['AntalPlatser'] + '<br>'
 	}
-		/*if (fp['Kommentar'] != null && fp['Kommentar'] != "") {
-			popupContent += '<b>Kommentar: </b>' + fp['Kommentar'] + '<br>'
-		}*/
-		//popupContent += '<b>Konsekvens av kommentaren: </b>' + fp['Konsekvens'] + '<br>' //
-		popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
+
+	popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
+
 	if (!fp.ejInventerad){
 		if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
 			popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
@@ -312,8 +305,6 @@ function buildPopupContent(feature) {
 			popupContent += '<br><b>Lämpligghet för normalladdning: </b>' + fp['normalScore'] + '<br>'
 			popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
 		}
-
-		//popupContent += '<b>trafikintensitet: </b>' + fp['Trafikfloeden'] + '<br>'
 
 		//if (fp.normalAppropriate || fp.snabbAppropriate) {
 		if (fp.Status == 'Förbereds'){
@@ -347,7 +338,7 @@ function buildPopupContent(feature) {
 			popupContent += 'Namn:<input type="text" name="Namn" value="' + formDefaultVals.namn + '"><br>'
 			popupContent += 'Kontaktinfo:<input type="text" name="Kontaktinfo" value="' + formDefaultVals.kontaktinfo + '"><br>'
 			popupContent += '<button type="button" class="button" onClick="jsSubmitForm(this.form)">Skicka</button> ' //'<input type="submit" value="Submit">'
-			popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
+			//popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
 			popupContent += '</form>'
 			popupContent += '</div>'
 		}
@@ -365,8 +356,8 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-var inventeradeYtor = new Promise(function(resolve, reject) {
-	$.getJSON("js/inventeradeYtor.geojson", function(data) {
+var allaYtor = new Promise(function(resolve, reject) {
+	$.getJSON("js/allaYtor.geojson", function(data) {
 		if(document.URL.indexOf("dev") >= 0){
 			console.log(data)
 		}
@@ -422,6 +413,12 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 					props.Status = 'Tillgänglig'
 				}
 			}
+			else {
+				if (props.Driftmaott == '' || props.Driftmaott == null) {
+					props.Status = 'Ej inventerad'
+				}
+			}
+
 			//data.features[feat].properties = props
 
 			//Summing totalts in keyNumbers.
@@ -469,19 +466,6 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 	});
 });
 
-var ytterstaden = new Promise(function(resolve, reject) {
-	$.getJSON("js/ytterstadsickeparallellparkeringar.geojson", function(data) {
-		for (feat in data.features) {
-			props = data.features[feat].properties
-			props.ejInventerad = true
-			props.Status = 'Tillgänglig'
-		}
-		resolve(data)
-	})
-})
-
-
-
 var tidigareSynpunkter = new Promise(function(resolve, reject) {
 	$.get(
 		"https://docs.google.com/spreadsheets/d/e/2PACX-1vR2YweDwSLRgG04w6aJqRSQLGUtbtv7IyNyQCoac4P0EcuusbKimuRaYgKvdXPWpcDy72jGjHBmESn-/pub?gid=0&single=true&output=csv",
@@ -497,14 +481,14 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
+Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 
-	var ytterstadensYtor = L.geoJson(values[1], {
+	var ejInventeradeYtor = L.geoJson(values[1], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return true //internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
+			return feature.properties.Status == 'Ej inventerad';
 		},
 		style: function(params) {
 			return {
@@ -597,7 +581,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			'Normalladdning': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej utredd': colors.grey100
+			'Ej inventerad': colors.grey100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
