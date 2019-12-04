@@ -6,9 +6,6 @@ if (isIE) {
 var internVy = false
 var tidigareSynpunkter, zoomYtor
 
-var lastUpdate = 0
-
-
 var keyNumbers = {
 	gator: {
 		totalt: 0,
@@ -22,22 +19,9 @@ var keyNumbers = {
 		anlagda: 0,
 		reserverade: 0,
 		oevriga: 0,
-
-	},
-	platser: {
-		totalt: 0,
-		utpekade: {
-			normal: 0,
-			snabb: 0,
-			snabbOchNormal: 0,
-			snabbEllerNormal: 0,
-		},
-		avtalade: 0,
-		anlagda: 0,
-		reserverade: 0,
-		oevriga: 0,
 	}
 }
+keyNumbers.platser = {...keyNumbers.gator}
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -296,74 +280,70 @@ function buildPopupContent(feature) {
 	popupContent += '<b>Skapad: </b>' + fp['skapad'].replace(/\//g, "-") + '<br>' //This replaces all "/" instead of just the first one.
 	popupContent += '<b>ID: </b>' + fp['id'] + '<br>' //+ ' (' + fp['qc_id'] + ')' + '<br>'
 
-	if (!fp.ejInventerad){
+	if (fp['AntalPlatser'] != '' && fp['AntalPlatser'] != null ){
 		popupContent += '<b>Ungefärligt antal platser: </b>' + fp['AntalPlatser'] + '<br>'
 	}
-		/*if (fp['Kommentar'] != null && fp['Kommentar'] != "") {
-			popupContent += '<b>Kommentar: </b>' + fp['Kommentar'] + '<br>'
-		}*/
-		//popupContent += '<b>Konsekvens av kommentaren: </b>' + fp['Konsekvens'] + '<br>' //
-		popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
-	if (!fp.ejInventerad){
-		if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
-			popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
+
+	popupContent += '<b>Status: </b>' + fp['Status'] + '<br>'
+
+
+	if (fp['Aktoer'] != '' && fp['Aktoer'] != null) {
+		popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
+	}
+
+	if (internVy) {
+		popupContent += '<br><h4>Kriteriebedömning</h4>'
+		popupContent += '<b>Exponering: </b>' + fp['Exponering'] + '<br>'
+		popupContent += '<b>Parkeringsvinkel: </b>' + fp['Pvinkel'] + '<br>'
+		popupContent += '<b>Gaturum: </b>' + fp['Gaturum'] + '<br>'
+		popupContent += '<b>Driftbredd: </b>' + fp['Driftmaott'] + '<br>'
+		popupContent += '<b>Plankrock: </b>' + fp['Plankrock'] + '<br>'
+		popupContent += '<b>Storlek: </b>' + fp['AntalPlBetyg'] + '<br>'
+		popupContent += '<b>Vattenavstånd: </b>' + fp['Vattennaerhet'] + '<br>'
+		popupContent += '<b>Sommargågata: </b>' + fp['Sommargaogata'] + '<br>'
+			//popupContent += '<b>Trädavstånd: </b>' + fp['Traed'] + '<br>'
+		popupContent += '<br><b>Lämpligghet för normalladdning: </b>' + fp['normalScore'] + '<br>'
+		popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
+	}
+
+	//if (fp.normalAppropriate || fp.snabbAppropriate) {
+	if (fp.Status == 'Förbereds'){
+		popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
+	}
+	if (fp.Traed == 1) {
+		popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
+	} else if (fp.Traed == 2) {
+		popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
+	}
+	/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
+		popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
+	}*/
+	if (fp.DyrElanslutning) {
+		popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
+	//	}
+	}
+	if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
+		popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
+	}
+	if (internVy) {
+		popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
+		for (var i in fp.Synpunkter) {
+			popupContent += fp.Synpunkter[i] + '<br>'
+
 		}
 
-		if (internVy) {
-			popupContent += '<br><h4>Kriteriebedömning</h4>'
-			popupContent += '<b>Exponering: </b>' + fp['Exponering'] + '<br>'
-			popupContent += '<b>Parkeringsvinkel: </b>' + fp['Pvinkel'] + '<br>'
-			popupContent += '<b>Gaturum: </b>' + fp['Gaturum'] + '<br>'
-			popupContent += '<b>Driftbredd: </b>' + fp['Driftmaott'] + '<br>'
-			popupContent += '<b>Plankrock: </b>' + fp['Plankrock'] + '<br>'
-			popupContent += '<b>Storlek: </b>' + fp['AntalPlBetyg'] + '<br>'
-			popupContent += '<b>Vattenavstånd: </b>' + fp['Vattennaerhet'] + '<br>'
-			popupContent += '<b>Sommargågata: </b>' + fp['Sommargaogata'] + '<br>'
-				//popupContent += '<b>Trädavstånd: </b>' + fp['Traed'] + '<br>'
-			popupContent += '<br><b>Lämpligghet för normalladdning: </b>' + fp['normalScore'] + '<br>'
-			popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
-		}
-
-		//popupContent += '<b>trafikintensitet: </b>' + fp['Trafikfloeden'] + '<br>'
-
-		//if (fp.normalAppropriate || fp.snabbAppropriate) {
-		if (fp.Status == 'Förbereds'){
-			popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
-		}
-		if (fp.Traed == 1) {
-			popupContent += '<br>Känsliga träd finns i närheten. Stor risk att vacuum-, eller handschakt blir nödvändligt.<br>'
-		} else if (fp.Traed == 2) {
-			popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
-		}
-		/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
-			popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
-		}*/
-		if (fp.DyrElanslutning) {
-			popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
-		//	}
-		}
-		if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
-			popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
-		}
-		if (internVy) {
-			popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
-			for (var i in fp.Synpunkter) {
-				popupContent += fp.Synpunkter[i] + '<br>'
-
-			}
-
-			popupContent += '<br><h3>Lämna synpunkt</h3><form style="width:200px" js_action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" "id="gform" >' //target="hiddenFrame"   method="POST" action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" ">'
-			popupContent += 'Synpunkt:<br>'
-			popupContent += '<input type="text" name="Synpunkt" value="' + formDefaultVals.synpunkt + '"><br>'
-			popupContent += 'Namn:<input type="text" name="Namn" value="' + formDefaultVals.namn + '"><br>'
-			popupContent += 'Kontaktinfo:<input type="text" name="Kontaktinfo" value="' + formDefaultVals.kontaktinfo + '"><br>'
-			popupContent += '<button type="button" class="button" onClick="jsSubmitForm(this.form)">Skicka</button> ' //'<input type="submit" value="Submit">'
-			popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
-			popupContent += '</form>'
-			popupContent += '</div>'
-		}
+		popupContent += '<br><h3>Lämna synpunkt</h3><form style="width:200px" js_action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" "id="gform" >' //target="hiddenFrame"   method="POST" action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" ">'
+		popupContent += 'Synpunkt:<br>'
+		popupContent += '<input type="text" name="Synpunkt" value="' + formDefaultVals.synpunkt + '"><br>'
+		popupContent += 'Namn:<input type="text" name="Namn" value="' + formDefaultVals.namn + '"><br>'
+		popupContent += 'Kontaktinfo:<input type="text" name="Kontaktinfo" value="' + formDefaultVals.kontaktinfo + '"><br>'
+		popupContent += '<button type="button" class="button" onClick="jsSubmitForm(this.form)">Skicka</button> ' //'<input type="submit" value="Submit">'
+		//popupContent += '<input type="hidden" value="' + fp.qc_id + '" name="cq_id">'
+		popupContent += '</form>'
 		popupContent += '</div>'
 	}
+	popupContent += '</div>'
+
 
 	return popupContent
 }
@@ -376,10 +356,10 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-var inventeradeYtor = new Promise(function(resolve, reject) {
-	$.getJSON("js/inventeradeYtor.geojson", function(data) {
-		if(document.URL.indexOf("dev") >= 0){ 
-			console.log(data)	
+var allaYtor = new Promise(function(resolve, reject) {
+	$.getJSON("js/allaYtor.geojson", function(data) {
+		if(document.URL.indexOf("dev") >= 0){
+			console.log(data)
 		}
 		//Interpreting antal platser and diskvalificeringskolumn.
 
@@ -427,12 +407,14 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
 				//Justerar resultat utifrån andra kriterier.
 
-			if (props.normalAppropriate || props.snabbAppropriate) {
-				//console.log(props.Status)
-				if (props.Status == '' || props.Status == null) {
-					props.Status = 'Tillgänglig'
+
+			if (props.Status == '' || props.Status == null) {
+				props.Status = 'Tillgänglig'
+				if (props.Driftmaott == '' || props.Driftmaott == null) {
+					props.ejInventerad = true
 				}
 			}
+
 			//data.features[feat].properties = props
 
 			//Summing totalts in keyNumbers.
@@ -480,19 +462,6 @@ var inventeradeYtor = new Promise(function(resolve, reject) {
 	});
 });
 
-var ytterstaden = new Promise(function(resolve, reject) {
-	$.getJSON("js/ytterstadsickeparallellparkeringar.geojson", function(data) {
-		for (feat in data.features) {
-			props = data.features[feat].properties
-			props.ejInventerad = true
-			props.Status = 'Tillgänglig'
-		}
-		resolve(data)
-	})
-})
-
-
-
 var tidigareSynpunkter = new Promise(function(resolve, reject) {
 	$.get(
 		"https://docs.google.com/spreadsheets/d/e/2PACX-1vR2YweDwSLRgG04w6aJqRSQLGUtbtv7IyNyQCoac4P0EcuusbKimuRaYgKvdXPWpcDy72jGjHBmESn-/pub?gid=0&single=true&output=csv",
@@ -508,14 +477,14 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
-Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
+Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
-	
-	var ytterstadensYtor = L.geoJson(values[1], {
+
+	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return true //internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
+			return feature.properties.ejInventerad;
 		},
 		style: function(params) {
 			return {
@@ -524,7 +493,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	
+
 
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
@@ -538,8 +507,7 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-	
-	console.log('2')
+
 	var tagnaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
@@ -598,10 +566,10 @@ Promise.all([inventeradeYtor, ytterstaden]).then(function(values) {
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
-
 	var legend = L.control({
 		position: 'bottomright'
 	});
+
 	legend.onAdd = function(map) {
 		var usedColors = {
 			'Snabbladdning': colors.magenta99,
