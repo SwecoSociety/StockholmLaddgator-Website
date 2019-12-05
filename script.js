@@ -21,7 +21,7 @@ var keyNumbers = {
 		oevriga: 0,
 	}
 }
-keyNumbers.platser = {...keyNumbers.gator}
+//keyNumbers.platser = {...keyNumbers.gator}
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -329,7 +329,6 @@ function buildPopupContent(feature) {
 		popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
 		for (var i in fp.Synpunkter) {
 			popupContent += fp.Synpunkter[i] + '<br>'
-
 		}
 
 		popupContent += '<br><h3>Lämna synpunkt</h3><form style="width:200px" js_action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" "id="gform" >' //target="hiddenFrame"   method="POST" action="https://script.google.com/macros/s/AKfycbzx8DB2Rct2AoYHuDOr5biKW3FWjs8zXCbQbpQ1Xg/exec" ">'
