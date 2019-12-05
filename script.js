@@ -488,7 +488,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.grey100
 			}
 		}
@@ -502,7 +502,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.black100
 			}
 		}
@@ -515,7 +515,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.blue100
 			}
 		}
@@ -529,7 +529,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.green99
 			}
 		}
@@ -542,7 +542,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.magenta99,
 				dashArray: '4,6',
 				lineCap: 'butt',
@@ -558,7 +558,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 5,
+				weight: 4,
 				color: colors.orange9999
 			}
 		}
