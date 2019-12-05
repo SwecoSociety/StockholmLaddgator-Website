@@ -21,7 +21,7 @@ var keyNumbers = {
 		oevriga: 0,
 	}
 }
-//keyNumbers.platser =
+
 keyNumbers.platser = Object.assign({},keyNumbers.gator) //Den omständliga variant behövs pga Edge, istället för  = {...keyNumbers.gator}
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
