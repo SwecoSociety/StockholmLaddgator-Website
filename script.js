@@ -99,40 +99,6 @@ var colors = {
 	'black100': '#000000',
 }
 
-
-const betygsvikter = {
-	'Normal': {
-		'AntalPlBetyg': ['', 0, 6, 8],
-		'Exponering': ['', 0, 3, 4],
-		'Pvinkel': ['', 0, 0, 2],
-		//'Traed': ['',0, 3, 6],
-		'Gaturum': ['', 0, 3, 6],
-		'Driftmaott': ['', -99, 0, 1],
-		'Plankrock': ['', -99, -99, 0],
-		'Vattennaerhet': ['', -99, 0, 2],
-		'Sommargaogata': [0, -99],
-		'FramfoerUteservering': [0, -99],
-	},
-
-	'Snabb': {
-		'AntalPlBetyg': ['', 0, 1, 2],
-		'Exponering': ['', 0, 5, 10],
-		'Pvinkel': ['', -99, -99, 0],
-		//'Traed': ['',0, 4, 8],
-		'Gaturum': ['', 0, 4, 8],
-		'Driftmaott': ['', -99, -99, 0],
-		'Plankrock': ['', -99, -99, 0],
-		'Vattennaerhet': ['', -99, 0, 2],
-		'Sommargaogata': [0, -99],
-		'FramfoerUteservering': [0, -99],
-	}
-}
-
-const minScore = {
-	'n': 11, //Var 17, men sänktes med 6 sedan kriteriet på träd togs bort enl. mail 190313
-	's': 0
-}
-
 //Add layers to top right menu
 L.control.layers(baseMaps).addTo(map)
 
@@ -267,11 +233,11 @@ function buildPopupContent(feature) {
 	var fp = feature.properties
 		//Skriver ut vad som är utpekat
 	popupContent += '<div style="width:160px"><h4>'
-	if (fp.normalAppropriate && fp.snabbAppropriate) {
+	if (fp.UtpekadNormal && fp.UtpekadSnabb) {
 		popupContent += 'Snabb- och normalladdning'
-	} else if (fp.normalAppropriate) {
+	} else if (fp.UtpekadNormal) {
 		popupContent += 'Endast normalladdning'
-	} else if (fp.snabbAppropriate) {
+	} else if (fp.UtpekadSnabb) {
 		popupContent += 'Endast snabbladdning'
 	} else if (fp.ejInventerad){
 		popupContent += 'Ej inventerad'
@@ -309,7 +275,7 @@ function buildPopupContent(feature) {
 		popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
 	}
 
-	//if (fp.normalAppropriate || fp.snabbAppropriate) {
+	//if (fp.UtpekadNormal || fp.UtpekadSnabb) {
 	if (fp.Status == 'Förbereds'){
 		popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
 	}
@@ -367,48 +333,6 @@ var allaYtor = new Promise(function(resolve, reject) {
 
 		for (feat in data.features) {
 			props = data.features[feat].properties
-			if (props.AntalPlatser < 4) {
-				props.AntalPlBetyg = 1
-			} else if (props.AntalPlatser < 10) {
-				props.AntalPlBetyg = 2
-			} else {
-				props.AntalPlBetyg = 3
-			}
-			if (props.Sommargaogata == true) {
-				props.Sommargaogata = 1
-			} else {
-				props.Sommargaogata = 0
-			}
-			if (props.FramfoerUteservering == true) {
-				props.FramfoerUteservering = 1
-			} else {
-				props.FramfoerUteservering = 0
-			}
-
-			//Räknar ut total score för varje yta.
-			props.normalScore = 0
-			props.snabbScore = 0
-			for (var aspect in betygsvikter.Normal) {
-				if (aspect in props) {
-					if (props[aspect] != null) {
-						var betyg = props[aspect]
-						props.normalScore += betygsvikter.Normal[aspect][betyg]
-						props.snabbScore += betygsvikter.Snabb[aspect][betyg]
-					} else {
-						props.normalScore -= 99
-						props.snabbScore -= 99
-					}
-				} else {
-					props.normalScore -= 99
-					props.snabbScore -= 99
-				}
-			}
-			//Kollar vad som blir utpekat enl. ursprungskriterier och tillägg.
-
-			props.normalAppropriate = props.normalScore >= minScore.n && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 //&& props.Status == ''
-			props.snabbAppropriate = props.snabbScore >= minScore.s && props.Konsekvens != 'Stryks' && props.AntalPlatser > 0 && props.Konsekvens != 'Ej snabbladding' // && props.Status == ''
-				//Justerar resultat utifrån andra kriterier.
-
 
 			if (props.Status == '' || props.Status == null) {
 				props.Status = 'Tillgänglig'
@@ -417,27 +341,25 @@ var allaYtor = new Promise(function(resolve, reject) {
 				}
 			}
 
-			//data.features[feat].properties = props
-
 			//Summing totalts in keyNumbers.
 
 			keyNumbers.gator.totalt += 1
 			keyNumbers.platser.totalt += props.AntalPlatser
 
 			if (props.Status == 'Tillgänglig') {
-				if (props.normalAppropriate || props.snabbAppropriate) {
+				if (props.UtpekadNormal || props.UtpekadSnabb) {
 					keyNumbers.gator.utpekade.snabbEllerNormal += 1
 					keyNumbers.platser.utpekade.snabbEllerNormal += props.AntalPlatser
 				}
-				if (props.normalAppropriate) {
+				if (props.UtpekadNormal) {
 					keyNumbers.gator.utpekade.normal += 1
 					keyNumbers.platser.utpekade.normal += props.AntalPlatser
 				}
-				if (props.snabbAppropriate) {
+				if (props.UtpekadSnabb) {
 					keyNumbers.gator.utpekade.snabb += 1
 					keyNumbers.platser.utpekade.snabb += props.AntalPlatser
 				}
-				if (props.normalAppropriate && props.snabbAppropriate) {
+				if (props.UtpekadNormal && props.UtpekadSnabb) {
 					keyNumbers.gator.utpekade.snabbOchNormal += 1
 					keyNumbers.platser.utpekade.snabbOchNormal += props.AntalPlatser
 				}
@@ -500,7 +422,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return internVy //!feature.properties.normalAppropriate && !feature.properties.snabbAppropriate;
+			return internVy //!feature.properties.UtpekadNormal && !feature.properties.UtpekadSnabb;
 		},
 		style: function(params) {
 			return {
@@ -527,7 +449,7 @@ Promise.all([allaYtor]).then(function(values) {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 
-			return feature.properties.normalAppropriate && feature.properties.Status == 'Tillgänglig';
+			return feature.properties.UtpekadNormal && feature.properties.Status == 'Tillgänglig';
 		},
 		style: function(params) {
 			return {
@@ -540,7 +462,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var snabbladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.snabbAppropriate && feature.properties.Status == 'Tillgänglig';
+			return feature.properties.UtpekadSnabb && feature.properties.Status == 'Tillgänglig';
 		},
 		style: function(params) {
 			return {
