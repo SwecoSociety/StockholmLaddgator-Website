@@ -416,7 +416,7 @@ Promise.all([allaYtor]).then(function(values) {
 		},
 		style: function(params) {
 			return {
-				weight: 40,
+				weight: 30,
 				color: colors.grey100// + 88 //+88 for transparency
 			}
 		},
