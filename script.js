@@ -527,13 +527,15 @@ Promise.all([allaYtor]).then(function(values) {
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
 		style = 'fill:none;stroke-width:2;stroke:'
+		box = '<rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="'
 		for (var i in usedColors) {
 			if (i=='Nyligen utpekad'){
 				style = 'fill:'+usedColors[i]+';stroke-width:4;stroke:'
+				box = '<rect x="1" y="4" width="26" height="10" rx="4" ry="4" style="'
 			}
 			div.innerHTML +=
 				labels.push(' <svg width="30" height="14">'+
-				'<rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="' + style +
+				box + style +
 				usedColors[i] +
 				'" /></svg>  ' +
 				i
