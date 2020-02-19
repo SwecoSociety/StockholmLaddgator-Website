@@ -498,7 +498,7 @@ Promise.all([allaYtor]).then(function(values) {
 			console.log(Date.parse(feature.properties['SenastÄndradUtpekning']))
 			console.log(Date.now()-2*30*24*60*60*1000)
 			console.log("-----------------")
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*30*24*60*60*1000;
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
 		},
 		style: function(params) {
 			return {
