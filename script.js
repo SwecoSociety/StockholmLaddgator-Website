@@ -449,7 +449,7 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	var normalladdningsytor = L.geoJson(values[0], {
+	/*var normalladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 
@@ -461,7 +461,7 @@ Promise.all([allaYtor]).then(function(values) {
 				color: colors.green99
 			}
 		}
-	}).addTo(map)
+	}).addTo(map)*/
 
 	var snabbladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
