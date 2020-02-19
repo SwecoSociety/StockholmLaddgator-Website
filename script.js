@@ -496,9 +496,9 @@ Promise.all([allaYtor]).then(function(values) {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 			console.log(Date.parse(feature.properties['SenastÄndradUtpekning']))
-			console.log(Date.parse(Date.now())-2*30*24*60*60*1000)
+			console.log(Date.now()-2*30*24*60*60*1000)
 			console.log("-----------------")
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.parse(Date.now())-2*30*24*60*60*1000;
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*30*24*60*60*1000;
 		},
 		style: function(params) {
 			return {
