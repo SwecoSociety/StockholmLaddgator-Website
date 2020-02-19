@@ -449,7 +449,7 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	/*var normalladdningsytor = L.geoJson(values[0], {
+	var normalladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 
@@ -461,7 +461,7 @@ Promise.all([allaYtor]).then(function(values) {
 				color: colors.green99
 			}
 		}
-	}).addTo(map)*/
+	}).addTo(map)
 
 	var snabbladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
@@ -495,6 +495,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var nyutpekadeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
+			console.log(String(Date.parse(feature.properties['SenastÄndradUtpekning'])) + "/" + String(Date.parse(Date.now())-2*30*24*60*60*1000))
 			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.parse(Date.now())-2*30*24*60*60*1000;
 		},
 		style: function(params) {
