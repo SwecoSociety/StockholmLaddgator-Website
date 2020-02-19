@@ -409,6 +409,19 @@ Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 
+	var nyutpekadeYtor = L.geoJson(values[0], {
+		onEachFeature: onEachFeature,
+		filter: function(feature, layer) {
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
+		},
+		style: function(params) {
+			return {
+				weight: 7,
+				color: colors.white100
+			}
+		}
+	}).addTo(map)
+
 	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
@@ -492,21 +505,6 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	var nyutpekadeYtor = L.geoJson(values[0], {
-		onEachFeature: onEachFeature,
-		filter: function(feature, layer) {
-			console.log(Date.parse(feature.properties['SenastÄndradUtpekning']))
-			console.log(Date.now()-2*30*24*60*60*1000)
-			console.log("-----------------")
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
-		},
-		style: function(params) {
-			return {
-				weight: 7,
-				color: colors.white100
-			}
-		}
-	}).addTo(map)
 
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
