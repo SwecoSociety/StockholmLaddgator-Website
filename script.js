@@ -521,7 +521,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Normalladdning': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej utredd': colors.grey100
+			'Ej utredd': colors.grey100,
 			'Nyligen utpekad': colors.grey100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
