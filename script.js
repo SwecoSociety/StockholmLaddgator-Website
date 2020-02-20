@@ -515,12 +515,11 @@ Promise.all([allaYtor]).then(function(values) {
 
 	legend.onAdd = function(map) {
 		var usedColors = {
-			'Snabbladdning': colors.magenta99,
-			'Normalladdning': colors.green99,
+			'Utpekad': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
 			'Ej utredd': colors.grey100,
-			'Nyligen utpekad': colors.yellow100
+			'Nyligen utpekad': colors.green99+55
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
