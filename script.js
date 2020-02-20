@@ -417,7 +417,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 30,
-				color: colors.grey100// + 88 //+88 for transparency
+				color: colors.green99+55
 			}
 		}
 	}).addTo(map)
