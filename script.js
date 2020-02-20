@@ -419,9 +419,7 @@ Promise.all([allaYtor]).then(function(values) {
 				weight: 30,
 				color: colors.grey100// + 88 //+88 for transparency
 			}
-		},
-		transparency: 'true',
-		opacity: 0.4
+		}
 	}).addTo(map)
 
 	var ejInventeradeYtor = L.geoJson(values[0], {
@@ -486,7 +484,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.magenta99,
+				color: colors.green99,
 				dashArray: '4,6',
 				lineCap: 'butt',
 				fill: false
@@ -522,7 +520,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
 			'Ej utredd': colors.grey100,
-			'Nyligen utpekad': colors.grey100
+			'Nyligen utpekad': colors.yellow100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
