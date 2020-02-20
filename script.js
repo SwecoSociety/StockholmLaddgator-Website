@@ -417,7 +417,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 30,
-				color: colors.green99+55
+				color: colors.green99+33
 			}
 		}
 	}).addTo(map)
@@ -528,7 +528,7 @@ Promise.all([allaYtor]).then(function(values) {
 		for (var i in usedColors) {
 			if (i=='Nyligen utpekad'){
 				style = 'fill:'+usedColors[i]+';stroke-width:0;stroke:'
-				box = '<rect x="1" y="4" width="26" height="10" rx="4" ry="4" style="'
+				box = '<rect x="1" y="4" width="26" height="14" rx="4" ry="4" style="'
 			}
 			div.innerHTML +=
 				labels.push(' <svg width="30" height="14">'+
