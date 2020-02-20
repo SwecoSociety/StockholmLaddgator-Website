@@ -421,7 +421,7 @@ Promise.all([allaYtor]).then(function(values) {
 			}
 		},
 		transparency: 'true',
-		opacity: 0.2
+		opacity: 0.4
 	}).addTo(map)
 
 	var ejInventeradeYtor = L.geoJson(values[0], {
