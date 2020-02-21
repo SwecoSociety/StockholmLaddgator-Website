@@ -520,19 +520,21 @@ Promise.all([allaYtor]).then(function(values) {
 	legend.onAdd = function(map) {
 		var usedColors = {
 			'Utpekad': colors.green99,
+			'Nyligen utpekad': greenWith20PercentTransparency,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej utredd': colors.black100,
-			'Nyligen utpekad': greenWith20PercentTransparency
+			'Ej utredd': colors.black100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
-		style = 'fill:none;stroke-width:2;stroke:'
-		box = '<rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="'
 		for (var i in usedColors) {
 			if (i=='Nyligen utpekad'){
-				style = 'fill:'+usedColors[i]+';stroke-width:0;stroke:'
-				box = '<rect x="1" y="4" width="26" height="14" rx="4" ry="4" style="'
+				var style = 'fill:'+usedColors[i]+';stroke-width:0;stroke:'
+				var box = '<rect x="1" y="4" width="26" height="14" rx="4" ry="4" style="'
+			}
+			else {
+				var style = 'fill:none;stroke-width:2;stroke:'
+				var box = '<rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="'
 			}
 			div.innerHTML +=
 				labels.push(' <svg width="30" height="14">'+
