@@ -19,16 +19,15 @@ var keyNumbers = {
 		anlagda: 0,
 		reserverade: 0,
 		oevriga: 0,
+		foerbereds: 0,
 	}
 }
 
 var trackedStatuses = ['tillgängliga','förbereds','reserverade','avtalade','anlagda']
 
-for (var s in trackedStatuses){
-	keyNumbers.gator[s] = 0
-}
 
-keyNumbers.platser = Object.assign({},keyNumbers.gator) //Den omständliga variant behövs pga Edge, istället för  = {...keyNumbers.gator}
+keyNumbers.platser = JSON.parse(JSON.stringify(keyNumbers.gator))
+
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
