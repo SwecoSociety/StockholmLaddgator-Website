@@ -19,16 +19,15 @@ var keyNumbers = {
 		anlagda: 0,
 		reserverade: 0,
 		oevriga: 0,
+		foerbereds: 0,
 	}
 }
 
 var trackedStatuses = ['tillgängliga','förbereds','reserverade','avtalade','anlagda']
 
-for (var s in trackedStatuses){
-	keyNumbers.gator[s] = 0
-}
 
-keyNumbers.platser = Object.assign({},keyNumbers.gator) //Den omständliga variant behövs pga Edge, istället för  = {...keyNumbers.gator}
+keyNumbers.platser = JSON.parse(JSON.stringify(keyNumbers.gator))
+
 
 var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
 	maxZoom: 18,
@@ -102,6 +101,8 @@ var colors = {
 	'white100': '#ffffff',
 	'black100': '#000000',
 }
+
+var greenWith20PercentTransparency = '#b3e6b9'
 
 //Add layers to top right menu
 L.control.layers(baseMaps).addTo(map)
@@ -344,9 +345,6 @@ var allaYtor = new Promise(function(resolve, reject) {
 					props.ejInventerad = true
 				}
 			}
-
-			//Summing totalts in keyNumbers.
-
 			keyNumbers.gator.totalt += 1
 			keyNumbers.platser.totalt += props.AntalPlatser
 
@@ -377,6 +375,9 @@ var allaYtor = new Promise(function(resolve, reject) {
 			} else if (props.Status == 'Reserverad') {
 				keyNumbers.gator.reserverade += 1
 				keyNumbers.platser.reserverade += props.AntalPlatser
+			} else if (props.Status == 'Förbereds') {
+				keyNumbers.gator.foerbereds += 1
+				keyNumbers.platser.foerbereds += props.AntalPlatser
 			} else {
 				keyNumbers.gator.oevriga += 1
 				keyNumbers.platser.oevriga += props.AntalPlatser
@@ -409,6 +410,21 @@ Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
 
+	var nyutpekadeYtor = L.geoJson(values[0], {
+		onEachFeature: onEachFeature,
+		filter: function(feature, layer) {
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
+		},
+		style: function(params) {
+			return {
+				weight: 30,
+				color: colors.green99
+			}
+		},
+		transparency: true,
+		opacity: 0.2
+	}).addTo(map)
+
 	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
@@ -417,7 +433,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.grey100
+				color: colors.black100
 			}
 		}
 	}).addTo(map)
@@ -471,7 +487,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.magenta99,
+				color: colors.green99,
 				dashArray: '4,6',
 				lineCap: 'butt',
 				fill: false
@@ -491,6 +507,8 @@ Promise.all([allaYtor]).then(function(values) {
 			}
 		}
 	}).addTo(map)
+
+
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
@@ -500,20 +518,32 @@ Promise.all([allaYtor]).then(function(values) {
 
 	legend.onAdd = function(map) {
 		var usedColors = {
-			'Snabbladdning': colors.magenta99,
-			'Normalladdning': colors.green99,
+			'Utpekad': colors.green99,
+			'Nyligen utpekad': greenWith20PercentTransparency,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej utredd': colors.grey100
+			'Ej utredd': colors.black100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
 		for (var i in usedColors) {
-
+			if (i=='Nyligen utpekad'){
+				var style = 'fill:'+usedColors[i]+';stroke-width:0;stroke:'
+				var box = '<rect x="1" y="4" width="26" height="14" rx="4" ry="4" style="'
+			}
+			else {
+				var style = 'fill:none;stroke-width:2;stroke:'
+				var box = '<rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="'
+			}
 			div.innerHTML +=
-				labels.push(' <svg width="30" height="14"><rect x="2" y="5" width="26" height="8" rx="2" ry="2" style="fill:none;stroke-width:2;stroke:' + usedColors[i] + '" /></svg>  ' + i);
-
+				labels.push(' <svg width="30" height="14">'+
+				box + style +
+				usedColors[i] +
+				'" /></svg>  ' +
+				i
+			);
 		}
+
 		//labels.push('<br>Denna karta visar ytor som har pekats ut av Stockholms stad som lämpliga för etablering av allmänna laddplatser. Platser som anses olämpliga visas inte i kartan. <br>Senast uppdaterad 2019-05-24')
 		div.innerHTML = labels.join('<br>');
 		return div;
