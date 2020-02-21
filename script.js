@@ -523,7 +523,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
 			'Ej utredd': colors.black100,
-			'Nyligen utpekad': colors.greenWith20PercentTransparency
+			'Nyligen utpekad': greenWith20PercentTransparency
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
