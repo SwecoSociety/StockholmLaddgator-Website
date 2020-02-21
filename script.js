@@ -345,9 +345,6 @@ var allaYtor = new Promise(function(resolve, reject) {
 					props.ejInventerad = true
 				}
 			}
-
-			//Summing totalts in keyNumbers.
-
 			keyNumbers.gator.totalt += 1
 			keyNumbers.platser.totalt += props.AntalPlatser
 
@@ -378,6 +375,9 @@ var allaYtor = new Promise(function(resolve, reject) {
 			} else if (props.Status == 'Reserverad') {
 				keyNumbers.gator.reserverade += 1
 				keyNumbers.platser.reserverade += props.AntalPlatser
+			} else if (props.Status == 'Förbereds') {
+				keyNumbers.gator.foerbereds += 1
+				keyNumbers.platser.foerbereds += props.AntalPlatser
 			} else {
 				keyNumbers.gator.oevriga += 1
 				keyNumbers.platser.oevriga += props.AntalPlatser
