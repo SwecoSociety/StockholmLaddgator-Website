@@ -417,11 +417,11 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 30,
-				color: colors.yellow100
+				color: colors.green99
 			}
 		},
 		transparency: true,
-		opacity: 0.5
+		opacity: 0.2
 	}).addTo(map)
 
 	var ejInventeradeYtor = L.geoJson(values[0], {
@@ -521,7 +521,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
 			'Ej utredd': colors.black100,
-			'Nyligen utpekad': colors.yellow100
+			'Nyligen utpekad': colors.green99
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
