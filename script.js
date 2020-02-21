@@ -417,7 +417,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 30,
-				color: colors.green99+33
+				color: colors.yellow100
 			}
 		}
 	}).addTo(map)
@@ -430,7 +430,7 @@ Promise.all([allaYtor]).then(function(values) {
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.grey100
+				color: colors.black100
 			}
 		}
 	}).addTo(map)
@@ -518,8 +518,8 @@ Promise.all([allaYtor]).then(function(values) {
 			'Utpekad': colors.green99,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Ej utredd': colors.grey100,
-			'Nyligen utpekad': colors.green99+55
+			'Ej utredd': colors.black100,
+			'Nyligen utpekad': colors.yellow100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
 		labels = ['<strong>Teckenförklaring</strong>']
