@@ -551,7 +551,6 @@ Promise.all([allaYtor]).then(function(values) {
 	legend.addTo(map);
 });
 
-//Lägg in analytics
 //Fixa legend igen
 //Fixa totaler i legend
 //Föreslå ny plats-funktion
