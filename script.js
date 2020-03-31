@@ -553,4 +553,4 @@ Promise.all([allaYtor]).then(function(values) {
 
 //Fixa legend igen
 //Fixa totaler i legend
-//Föreslå ny plats-funktion
+//Föreslå ny plats-funktio
