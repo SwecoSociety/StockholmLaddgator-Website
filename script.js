@@ -406,6 +406,8 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
+msPerDay = 24*60*60*1000
+
 Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
@@ -413,7 +415,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var nyutpekadeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*msPerDay && feature.properties.Status == 'Tillgänglig' && (feature.properties.UtpekadNormal || feature.properties.UtpekadSnnabb);
 		},
 		style: function(params) {
 			return {
@@ -551,7 +553,6 @@ Promise.all([allaYtor]).then(function(values) {
 	legend.addTo(map);
 });
 
-//Lägg in analytics
 //Fixa legend igen
 //Fixa totaler i legend
-//Föreslå ny plats-funktion
+//Föreslå ny plats-funktio
