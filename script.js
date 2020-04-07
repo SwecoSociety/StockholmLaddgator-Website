@@ -406,6 +406,8 @@ var tidigareSynpunkter = new Promise(function(resolve, reject) {
 
 var globalValues
 
+msPerDay = 24*60*60*1000
+
 Promise.all([allaYtor]).then(function(values) {
 	//console.log(values);
 	globalValues = values
@@ -413,7 +415,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var nyutpekadeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*24*60*60*1000;
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-45*msPerDay;
 		},
 		style: function(params) {
 			return {
