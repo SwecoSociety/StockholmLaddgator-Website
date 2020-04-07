@@ -415,7 +415,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var nyutpekadeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-45*msPerDay;
+			return Date.parse(feature.properties['SenastÄndradUtpekning']) > Date.now()-2*29*msPerDay && feature.properties.Status == 'Tillgänglig' && (feature.properties.UtpekadNormal || feature.properties.UtpekadSnnabb);
 		},
 		style: function(params) {
 			return {
