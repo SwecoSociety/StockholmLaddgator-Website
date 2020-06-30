@@ -280,7 +280,6 @@ function buildPopupContent(feature) {
 		popupContent += '<b>Lämpligghet för snabbladdning: </b>' + fp['snabbScore'] + '<br>'
 	}
 
-	//if (fp.UtpekadNormal || fp.UtpekadSnabb) {
 	if (fp.Status == 'Förbereds'){
 		popupContent += 'Laddgatan förbereds med ledningsdragning och fundament av Ellevio, samordning med elnätsprojekt kan förekomma.'
 	}
@@ -289,9 +288,7 @@ function buildPopupContent(feature) {
 	} else if (fp.Traed == 2) {
 		popupContent += '<br>Känsliga träd finns i närheten. Vacuum-, eller handschakt kan bli nödvändligt.<br>'
 	}
-	/*if (fp.Sommargaogata) { //Numera sållas alla dessa bort.
-		popupContent += '<br>Del av sommargågata med begränsad tillgång för fordon under sommarmånader.'
-	}*/
+	
 	if (fp.DyrElanslutning) {
 		popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
 	//	}
@@ -316,7 +313,6 @@ function buildPopupContent(feature) {
 		popupContent += '</div>'
 	}
 	popupContent += '</div>'
-
 
 	return popupContent
 }
@@ -381,10 +377,7 @@ var allaYtor = new Promise(function(resolve, reject) {
 			} else {
 				keyNumbers.gator.oevriga += 1
 				keyNumbers.platser.oevriga += props.AntalPlatser
-
 			}
-
-
 		}
 		console.log(keyNumbers)
 		resolve(data)
@@ -509,7 +502,6 @@ Promise.all([allaYtor]).then(function(values) {
 			}
 		}
 	}).addTo(map)
-
 
 	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
