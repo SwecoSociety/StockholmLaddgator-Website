@@ -231,10 +231,10 @@ function buildPopupContent(feature) {
 		popupContent += 'Endast normalladdning'
 	} else if (fp.UtpekadSnabb) {
 		popupContent += 'Endast snabbladdning'
-	} else if (fp.ejInventerad){
+	} else if (fp.ejInventerad || fp.prelDriftmaottOk){
 		popupContent += 'Ej utredd'
-	} else if (fp.prelDriftmaottOk){
-		popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
+	//} else if (fp.prelDriftmaottOk){
+	//	popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
@@ -329,7 +329,7 @@ var allaYtor = new Promise(function(resolve, reject) {
 				if (props.Driftmaott == '' || props.Driftmaott == null) {
 					props.ejInventerad = true
 				}
-				else if (props.Kommentar != null){	
+				if (props.Kommentar != null){	
 					if (props.Kommentar.indexOf('Programmatiskt fastställt driftmått') > -1) {
 						console.log(props.Kommentar)
 						props.prelDriftmaottOk = true
@@ -418,7 +418,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var ejInventeradeYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.ejInventerad;
+			return feature.properties.ejInventerad && !feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
 			return {
