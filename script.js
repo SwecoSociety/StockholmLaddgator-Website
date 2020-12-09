@@ -233,8 +233,8 @@ function buildPopupContent(feature) {
 		popupContent += 'Endast snabbladdning'
 	} else if (fp.ejInventerad){
 		popupContent += 'Ej utredd'
-	} else if (fp.prelDriftmaottOk){
-		popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
+	//} else if (fp.prelDriftmaottOk){
+	//	popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
