@@ -105,7 +105,10 @@ var colors = {
 var greenWith20PercentTransparency = '#b3e6b9'
 
 //Add layers to top right menu
-L.control.layers(baseMaps).addTo(map)
+//L.control.layers(baseMaps).addTo(map)
+L.control.layers(baseMaps, null, {
+	//position: 'topleft'
+}).addTo(map)
 
 function CSVToArray(strData, strDelimiter) {
 	strDelimiter = (strDelimiter || ",");
@@ -246,6 +249,8 @@ function buildPopupContent(feature) {
 		popupContent += 'Endast snabbladdning'
 	} else if (fp.ejInventerad){
 		popupContent += 'Ej inventerad'
+	} else if (fp.prelDriftmaottOk){
+		popupContent += 'Ej inventerad, men driftmått sannolikt tillräckligt'
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
@@ -339,6 +344,12 @@ var allaYtor = new Promise(function(resolve, reject) {
 				props.Status = 'Tillgänglig'
 				if (props.Driftmaott == '' || props.Driftmaott == null) {
 					props.ejInventerad = true
+				}
+				else if (props.Kommentar != null){	
+					if (props.Kommentar.indexOf('Programmatiskt fastställt driftmått') > -1) {
+						console.log(props.Kommentar)
+						props.prelDriftmaottOk = true
+					}
 				}
 			}
 			keyNumbers.gator.totalt += 1
@@ -464,7 +475,7 @@ Promise.all([allaYtor]).then(function(values) {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 
-			return feature.properties.UtpekadNormal && feature.properties.Status == 'Tillgänglig';
+			return feature.properties.UtpekadNormal && feature.properties.Status == 'Tillgänglig' && !feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
 			return {
@@ -477,7 +488,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var snabbladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.UtpekadSnabb && feature.properties.Status == 'Tillgänglig';
+			return feature.properties.UtpekadSnabb && feature.properties.Status == 'Tillgänglig' && !feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
 			return {
@@ -506,12 +517,12 @@ Promise.all([allaYtor]).then(function(values) {
 	var ytorMedPrelFaststaelldDriftsbredd = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.Status == 'PrelDriftbreddOk';
+			return feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
 			return {
 				weight: 3,
-				color: colors.orange9999
+				color: colors.yellow100
 			}
 		}
 	}).addTo(map)
@@ -529,6 +540,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Nyligen utpekad': greenWith20PercentTransparency,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
+			'Preliminärt fastställd driftsbredd': colors.yellow100,
 			'Ej utredd': colors.black100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
