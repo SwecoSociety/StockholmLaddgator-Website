@@ -540,7 +540,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Nyligen utpekad': greenWith20PercentTransparency,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Preliminärt fastställd driftsbredd': colors.yellow100,
+			'Preliminärt godkänd driftsbredd': colors.yellow100,
 			'Ej utredd': colors.black100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
