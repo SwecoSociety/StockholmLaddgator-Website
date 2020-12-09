@@ -28,25 +28,9 @@ var trackedStatuses = ['tillgängliga','förbereds','reserverade','avtalade','an
 
 keyNumbers.platser = JSON.parse(JSON.stringify(keyNumbers.gator))
 
-
-var OpenStreetMap_BlackAndWhite = L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-	maxZoom: 18,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-})
-
-var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	maxZoom: 19,
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-})
-
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 })
-
-var Hydda_Full = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png', {
-	maxZoom: 18,
-	attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
 
 var mapbox_light = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGVycmthcmxzb24iLCJhIjoiY2p0cjhvaGVtMGN0cDN6cW5sbjhxM3VmNiJ9.IvDJRSM2SJEtBis1qI1hLQ', {
 	tileSize: 512,
@@ -248,9 +232,9 @@ function buildPopupContent(feature) {
 	} else if (fp.UtpekadSnabb) {
 		popupContent += 'Endast snabbladdning'
 	} else if (fp.ejInventerad){
-		popupContent += 'Ej inventerad'
+		popupContent += 'Ej utredd'
 	} else if (fp.prelDriftmaottOk){
-		popupContent += 'Ej inventerad, men driftmått sannolikt tillräckligt'
+		popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
 	} else {
 		popupContent += 'Ingen typ av laddning'
 	}
