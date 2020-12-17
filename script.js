@@ -262,7 +262,9 @@ function buildPopupContent(feature) {
 	
 	if (fp.DyrElanslutning) {
 		popupContent += '<br>Kostnad för att ansluta till elnätet bedöms vara mycket hög.<br>'
-	//	}
+	}
+	if (fp.prelDriftmaottOk){
+		popupContent += '<br>Platsen bedöms preliminärt ha erforderlig bredd för driften (≥ 2,5 m fri bredd vid laddstolpe).<br>'
 	}
 	if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
 		popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
@@ -501,4 +503,4 @@ Promise.all([allaYtor]).then(function(values) {
 
 //Fixa legend igen
 //Fixa totaler i legend
-//Föreslå ny plats-funktio
+//Föreslå ny plats-funktion
