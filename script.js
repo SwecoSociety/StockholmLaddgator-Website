@@ -3,30 +3,9 @@ if (isIE) {
 	alert("Det verkar som att du använder en webbläsare som inte stödjer alla funktioner på sajten. Vänligen överväg att byta till en modern webbläsare, såsom Chrome eller Firefox.")
 }
 
-var internVy = false
+var egenVy = false
 var tidigareSynpunkter, zoomYtor
 
-var keyNumbers = {
-	gator: {
-		totalt: 0,
-		utpekade: {
-			normal: 0,
-			snabb: 0,
-			snabbOchNormal: 0,
-			snabbEllerNormal: 0,
-		},
-		avtalade: 0,
-		anlagda: 0,
-		reserverade: 0,
-		oevriga: 0,
-		foerbereds: 0,
-	}
-}
-
-var trackedStatuses = ['tillgängliga','förbereds','reserverade','avtalade','anlagda']
-
-
-keyNumbers.platser = JSON.parse(JSON.stringify(keyNumbers.gator))
 
 var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
@@ -218,11 +197,14 @@ function jsSubmitForm(e) {
 	return false;
 }
 
+
+
+
 function buildPopupContent(feature) {
 
-	var popupContent = ''
-
 	var fp = feature.properties
+	
+	var popupContent = ''
 		//Skriver ut vad som är utpekat
 	popupContent += '<div style="width:160px"><h4>'
 	if (fp.UtpekadNormal && fp.UtpekadSnabb) {
@@ -231,7 +213,7 @@ function buildPopupContent(feature) {
 		popupContent += 'Endast normalladdning'
 	} else if (fp.UtpekadSnabb) {
 		popupContent += 'Endast snabbladdning'
-	} else if (fp.ejInventerad || fp.prelDriftmaottOk){
+	} else if (!fp.Utredd || fp.prelDriftmaottOk){ //TODO: Ev ta bara med första if-halvan.
 		popupContent += 'Ej utredd'
 	//} else if (fp.prelDriftmaottOk){
 	//	popupContent += 'Ej utredd, men driftmått sannolikt tillräckligt'
@@ -254,7 +236,7 @@ function buildPopupContent(feature) {
 		popupContent += '<b>Aktör: </b>' + fp['Aktoer'] + '<br>'
 	}
 
-	if (internVy) {
+	if (egenVy) {
 		popupContent += '<br><h4>Kriteriebedömning</h4>'
 		popupContent += '<b>Exponering: </b>' + fp['Exponering'] + '<br>'
 		popupContent += '<b>Parkeringsvinkel: </b>' + fp['Pvinkel'] + '<br>'
@@ -285,7 +267,7 @@ function buildPopupContent(feature) {
 	if (fp['PublikKommentar'] != '' && fp['PublikKommentar'] != null) {
 		popupContent += '<br>' + fp['PublikKommentar'] + '<br>'
 	}
-	if (internVy) {
+	if (egenVy) {
 		popupContent += '<br><br><div name="inkomna_synpunkter"><h3>Inkomna synpunkter:</h3>'
 		for (var i in fp.Synpunkter) {
 			popupContent += fp.Synpunkter[i] + '<br>'
@@ -316,8 +298,9 @@ function onEachFeature(feature, layer) {
 
 var allaYtor = new Promise(function(resolve, reject) {
 	$.getJSON("js/allaYtor.geojson", function(data) {
-		if(document.URL.indexOf("dev") >= 0){
+		if(document.URL.indexOf("localhost") >= 0){ //document.URL.indexOf("dev") >= 0 || 
 			console.log(data)
+			egenVy = true
 		}
 		//Interpreting antal platser and diskvalificeringskolumn.
 
@@ -326,55 +309,18 @@ var allaYtor = new Promise(function(resolve, reject) {
 
 			if (props.Status == '' || props.Status == null) {
 				props.Status = 'Tillgänglig'
-				if (props.Driftmaott == '' || props.Driftmaott == null) {
-					props.ejInventerad = true
+				/*if (props.Driftmaott == '' || props.Driftmaott == null) {
+					props.Utredd = false
 				}
 				if (props.Kommentar != null){	
 					if (props.Kommentar.indexOf('Programmatiskt fastställt driftmått') > -1) {
 						console.log(props.Kommentar)
 						props.prelDriftmaottOk = true
 					}
-				}
+				}*/
 			}
-			keyNumbers.gator.totalt += 1
-			keyNumbers.platser.totalt += props.AntalPlatser
-
-			if (props.Status == 'Tillgänglig') {
-				if (props.UtpekadNormal || props.UtpekadSnabb) {
-					keyNumbers.gator.utpekade.snabbEllerNormal += 1
-					keyNumbers.platser.utpekade.snabbEllerNormal += props.AntalPlatser
-				}
-				if (props.UtpekadNormal) {
-					keyNumbers.gator.utpekade.normal += 1
-					keyNumbers.platser.utpekade.normal += props.AntalPlatser
-				}
-				if (props.UtpekadSnabb) {
-					keyNumbers.gator.utpekade.snabb += 1
-					keyNumbers.platser.utpekade.snabb += props.AntalPlatser
-				}
-				if (props.UtpekadNormal && props.UtpekadSnabb) {
-					keyNumbers.gator.utpekade.snabbOchNormal += 1
-					keyNumbers.platser.utpekade.snabbOchNormal += props.AntalPlatser
-				}
-			} else if (props.Status == 'Avtalad') {
-				keyNumbers.gator.avtalade += 1
-				keyNumbers.platser.avtalade += props.AntalPlatser
-
-			} else if (props.Status == 'Anlagd') {
-				keyNumbers.gator.anlagda += 1
-				keyNumbers.platser.anlagda += props.AntalPlatser
-			} else if (props.Status == 'Reserverad') {
-				keyNumbers.gator.reserverade += 1
-				keyNumbers.platser.reserverade += props.AntalPlatser
-			} else if (props.Status == 'Förbereds') {
-				keyNumbers.gator.foerbereds += 1
-				keyNumbers.platser.foerbereds += props.AntalPlatser
-			} else {
-				keyNumbers.gator.oevriga += 1
-				keyNumbers.platser.oevriga += props.AntalPlatser
-			}
+			
 		}
-		console.log(keyNumbers)
 		resolve(data)
 	});
 });
@@ -415,10 +361,10 @@ Promise.all([allaYtor]).then(function(values) {
 		opacity: 0.2
 	}).addTo(map)
 
-	var ejInventeradeYtor = L.geoJson(values[0], {
+	var ejUtreddaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.ejInventerad && !feature.properties.prelDriftmaottOk;
+			return !feature.properties.Utredd && !feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
 			return {
@@ -429,10 +375,10 @@ Promise.all([allaYtor]).then(function(values) {
 	}).addTo(map)
 
 
-	var andraYtor = L.geoJson(values[0], {
+	/*var andraYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return internVy //!feature.properties.UtpekadNormal && !feature.properties.UtpekadSnabb;
+			return false//egenVy //!feature.properties.UtpekadNormal && !feature.properties.UtpekadSnabb;
 		},
 		style: function(params) {
 			return {
@@ -440,12 +386,12 @@ Promise.all([allaYtor]).then(function(values) {
 				color: colors.black100
 			}
 		}
-	}).addTo(map)
+	}).addTo(map)*/
 
 	var tagnaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.Status == 'Avtalad' || feature.properties.Status == 'Anlagd' || feature.properties.Status == 'Reserverad' || feature.properties.Status == 'Delvis tillgänglig' || feature.properties.Status == 'Delvis avtalad'; //Ta bort delvis:arna när jag styckar upp ytor direkt innan publicering.
+			return feature.properties.Tilldelad//feature.properties.Status == 'Avtalad' || feature.properties.Status == 'Anlagd' || feature.properties.Status == 'Reserverad' || feature.properties.Status == 'Delvis tillgänglig' || feature.properties.Status == 'Delvis avtalad'; //Ta bort delvis:arna när jag styckar upp ytor direkt innan publicering.
 		},
 		style: function(params) {
 			return {
@@ -458,7 +404,6 @@ Promise.all([allaYtor]).then(function(values) {
 	var normalladdningsytor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-
 			return feature.properties.UtpekadNormal && feature.properties.Status == 'Tillgänglig' && !feature.properties.prelDriftmaottOk;
 		},
 		style: function(params) {
@@ -501,7 +446,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var ytorMedPrelFaststaelldDriftsbredd = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return feature.properties.prelDriftmaottOk;
+			return feature.properties.prelDriftmaottOk && !feature.properties.Tilldelad;
 		},
 		style: function(params) {
 			return {
@@ -511,7 +456,7 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	var group = new L.featureGroup([andraYtor, /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
+	var group = new L.featureGroup([/*andraYtor,*/ /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
 
 	var legend = L.control({
