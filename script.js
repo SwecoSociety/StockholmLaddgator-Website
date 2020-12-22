@@ -366,7 +366,7 @@ Promise.all([allaYtor]).then(function(values) {
 	var ejUtreddaYtor = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
-			return !feature.properties.Utredd && !feature.properties.prelDriftmaottOk;
+			return !feature.properties.Utredd //&& !feature.properties.Tilldelad;
 		},
 		style: function(params) {
 			return {
@@ -445,7 +445,7 @@ Promise.all([allaYtor]).then(function(values) {
 		}
 	}).addTo(map)
 
-	var ytorMedPrelFaststaelldDriftsbredd = L.geoJson(values[0], {
+	/*var ytorMedPrelFaststaelldDriftsbredd = L.geoJson(values[0], {
 		onEachFeature: onEachFeature,
 		filter: function(feature, layer) {
 			return feature.properties.prelDriftmaottOk && !feature.properties.Tilldelad;
@@ -456,7 +456,7 @@ Promise.all([allaYtor]).then(function(values) {
 				color: colors.yellow100
 			}
 		}
-	}).addTo(map)
+	}).addTo(map)*/
 
 	var group = new L.featureGroup([/*andraYtor,*/ /*tagnaYtor ,*/ normalladdningsytor, snabbladdningsytor]);
 	map.fitBounds(group.getBounds());
@@ -471,7 +471,7 @@ Promise.all([allaYtor]).then(function(values) {
 			'Nyligen utpekad': greenWith20PercentTransparency,
 			'Avtalad eller anlagd': colors.blue100,
 			'Laddgatan förbereds med ledningsdragning och fundament av Ellevio': colors.orange9999,
-			'Preliminärt godkänd driftsbredd': colors.yellow100,
+			//'Preliminärt godkänd driftsbredd': colors.yellow100,
 			'Ej utredd': colors.black100
 		}
 		var div = L.DomUtil.create('div', 'info legend');
